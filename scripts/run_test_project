@@ -1,0 +1,10 @@
+#!/bin/bash
+
+WS=~/lilia_ws
+PKG=alexa_gui_updated
+PROJECT=gui
+FILE_NAME=Listener
+PATH_TO_PROJECT=$WS/src/$PKG/$PROJECT
+PROJECT_CLASS_PATH=com.github.rosjava.$PKG.$PROJECT.$FILE_NAME
+
+$PATH_TO_PROJECT/build/install/$PROJECT/bin/$PROJECT $PROJECT_CLASS_PATH
