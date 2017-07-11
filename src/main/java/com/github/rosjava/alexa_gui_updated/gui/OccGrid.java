@@ -30,19 +30,16 @@ public class OccGrid {
 				j -= 40;
 				if(j >= 27 && j <= 33 && k >= 27 && k <= 33)
 					c = Color.RED;
-				System.out.println(j + ":" + (59 - j));
 				im.setRGB(59 - j, k, c.getRGB());
 				j += 40;
 			} else { 
 				j += 20;
 				if(j >= 27 && j <= 33 && k >= 27 && k <= 33)
 					c = Color.RED;
-				System.out.println(j + ":" + (59 - j));
 				im.setRGB(59 - j, k, c.getRGB());
 				j -= 20;
 			}
 			j++;
-			//System.out.println(j + ", " + k);
 		}
 		
 		return im;

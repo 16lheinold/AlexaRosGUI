@@ -32,6 +32,8 @@ import org.ros.node.NodeMain;
 import org.ros.node.topic.Subscriber;
 
 import nav_msgs.OccupancyGrid;
+import std_msgs.Bool;
+import std_msgs.String;
 
 /**
  * A simple {@link Subscriber} {@link NodeMain}.
@@ -47,7 +49,7 @@ public class Listener extends AbstractNodeMain {
 	public void onStart(ConnectedNode connectedNode) {
 		final Log log = connectedNode.getLog();
 		final Alexa_GUI gui = new Alexa_GUI();
-		gui.setSize(800, 500);
+		gui.setSize(850, 500);
 		gui.setVisible(true);
 		gui.setTitle("Pioneer Directions Robot");
 
@@ -72,6 +74,34 @@ public class Listener extends AbstractNodeMain {
 				BufferedImage i = o.toImage();
 				gui.setLaserImage(i);
 				log.info("here");
+			}
+		});
+		Subscriber<std_msgs.Bool> runningQueueSub = connectedNode.newSubscriber("/queue/running_queue", std_msgs.Bool._TYPE);
+		runningQueueSub.addMessageListener(new MessageListener<std_msgs.Bool>() {
+			@Override
+			public void onNewMessage(std_msgs.Bool message) {
+				gui.setRunningQueue(message.getData());
+			}
+		});
+		Subscriber<std_msgs.Bool> queueingSub = connectedNode.newSubscriber("/queue/queueing", std_msgs.Bool._TYPE);
+		queueingSub.addMessageListener(new MessageListener<std_msgs.Bool> () {
+			@Override
+			public void onNewMessage(std_msgs.Bool message) {
+				gui.setQueueing(message.getData());
+			}
+		});
+		Subscriber<std_msgs.String> queueSub = connectedNode.newSubscriber("/queue/current_queue", std_msgs.String._TYPE);
+		queueSub.addMessageListener(new MessageListener<std_msgs.String> () {
+			@Override
+			public void onNewMessage(std_msgs.String message) {
+				gui.setQueue(message.getData());
+			}
+		});
+		Subscriber<std_msgs.String> currentCommandSub = connectedNode.newSubscriber("/queue/current_command", std_msgs.String._TYPE);
+		currentCommandSub.addMessageListener(new MessageListener<std_msgs.String> () {
+			@Override
+			public void onNewMessage(std_msgs.String message) {
+				gui.setCurrentCommand(message.getData());
 			}
 		});
 	}

@@ -2,6 +2,8 @@ package com.github.rosjava.alexa_gui_updated.gui;
 
 import org.apache.commons.logging.Log;
 import org.ros.*;
+
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.image.BufferedImage;
 
@@ -21,6 +23,7 @@ public class Alexa_GUI extends GBFrame{
 	private GBPanel cameraLidar;
 	private ImagePanel drawingPanel;
 	private JButton switchCamera;
+	private JButton cancel;
 	private boolean laser;
 	private BufferedImage laserIm;
 	private BufferedImage cameraIm;
@@ -34,9 +37,11 @@ public class Alexa_GUI extends GBFrame{
 		runningQueue = addLabel("<html>Currently running queue? <font color='red'>No</font></html>", 2,8,4,1);
 		queue = addTextArea("Queue: \n", 3,7,4,4);
 		switchCamera = addButton("Switch from Camera to Laser Scan", 8,1,6,1);
-		currentCommand = addLabel("<html><p style=\"text-align:center\"><font size=5>CURRENT COMMAND: </font></p></html>",9,5,5,1);
+		currentCommand = addLabel("<html><p style=\"text-align:center\"><font size=5>CURRENT COMMAND: </font></p></html>",9,1,10,1);
 		exit = addButton("Exit",10,1,10,1);
+		cancel = addButton("CANCEL CURRENT ACTION", 8, 7, 4, 1);
 		
+		cancel.setBackground(Color.RED);
 		queue.setEditable(false);
 		laserIm = new BufferedImage(60, 60, BufferedImage.TYPE_INT_RGB);
 		cameraIm = new BufferedImage(800, 800, BufferedImage.TYPE_INT_RGB);
@@ -56,7 +61,7 @@ public class Alexa_GUI extends GBFrame{
 	}
 	
 	public void setQueue(String text) {
-		queue.setText(text);
+		queue.setText("Queue: \n" + text);
 	}
 	
 	public void setCurrentCommand(String text) {
