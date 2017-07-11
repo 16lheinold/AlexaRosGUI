@@ -48,6 +48,8 @@ public class Listener extends AbstractNodeMain {
 	@Override
 	public void onStart(ConnectedNode connectedNode) {
 		final Log log = connectedNode.getLog();
+		
+		//Set up the GUI
 		final Alexa_GUI gui = new Alexa_GUI();
 		gui.setSize(850, 500);
 		gui.setVisible(true);

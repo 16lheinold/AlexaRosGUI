@@ -14,6 +14,9 @@ public class OccGrid {
 		this.height = height;
 	}
 	
+	/**
+	 * Converts a occupancy grid into a buffered image
+	 */
 	public BufferedImage toImage() {
 		BufferedImage im = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		int j = 0;

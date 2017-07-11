@@ -11,6 +11,7 @@ import javax.swing.*;
 import BreezySwing.*;
 
 public class Alexa_GUI extends GBFrame{
+	//GUI components
 	private JButton exit;
 	private JTextArea queue;
 	private JMenuItem exitMenu;
@@ -24,11 +25,15 @@ public class Alexa_GUI extends GBFrame{
 	private ImagePanel drawingPanel;
 	private JButton switchCamera;
 	private JButton cancel;
-	private boolean laser;
 	private BufferedImage laserIm;
 	private BufferedImage cameraIm;
 	
+	//other variables
+	private boolean laser;
+	private boolean cancelling;
+	
 	public Alexa_GUI() {
+		//Set up GUI
 		drawingPanel = new ImagePanel();
 		helpMenu = addMenuItem("Menu", "View List of Commands");
 		exitMenu = addMenuItem("Menu", "Exit");
@@ -41,34 +46,66 @@ public class Alexa_GUI extends GBFrame{
 		exit = addButton("Exit",10,1,10,1);
 		cancel = addButton("CANCEL CURRENT ACTION", 8, 7, 4, 1);
 		
+		//Initialize everything
 		cancel.setBackground(Color.RED);
 		queue.setEditable(false);
 		laserIm = new BufferedImage(60, 60, BufferedImage.TYPE_INT_RGB);
 		cameraIm = new BufferedImage(800, 800, BufferedImage.TYPE_INT_RGB);
 		updateImages();
 		laser = false;
+		cancelling = false;
 	}
 	
 	
 	public void buttonClicked(JButton b) {
-		if(b == exit) {
+		if(b == exit) { //Exit
 			System.exit(0);
 		}
-		if(b == switchCamera) {
+		if(b == switchCamera) { //Switch between camera and laser scan
 			laser = !laser;
 			updateImages();
 		}
 	}
 	
-	public void setQueue(String text) {
+	public void menuItemSelected(JMenuItem m) {
+		if(m == exitMenu) { //Exit
+			System.exit(0);
+		}
+		
+		if(m == helpMenu) { //Help Menu
+			String message = "List of commands:\n\nMove the robot [direction] [number] [unit]: Move the robot a certain "
+					+ "distance. \nUnits are meters, centimetrs,"
+					+ " feet or inches. \n\nTurn the robot [left/right] [number] [degrees or radians]: Turn the robot a "
+					+ "certain amount in a certain direction.\nDefault is 90 degrees.\n\n"
+					+ "Find the door [direction] of  you: Find a door in a specific direction, or the closest.\n"
+					+ "Default is closest door.\n\n"
+					+ "Go [direction] down the hallway: Go down a hallway if you're in one. \n"
+					+ "Default is the direction the robot is facing.\n\n"
+					+ "[Start/stop] queueing/[start/stop] recording instructions: Any instruction given while in queueing mode\n"
+					+ "will be added to the queue and executed later.\n\n"
+					+ "[Start/stop] running the queue: Start/stop executing the commands in the queue.\n\n"
+					+ "Cancel: Cancels the current action; stops both queueing and running the queue.";
+			messageBox(message,815, 400);
+		}
+	}
+	
+	public boolean getCancel() { //Return whether current command has been cancelled
+		return cancelling;
+	}
+	
+	public void setCancel(boolean b) { //Uncancel or cancel something
+		cancelling = b;
+	}
+	
+	public void setQueue(String text) { //Set the text in the queue text box
 		queue.setText("Queue: \n" + text);
 	}
 	
-	public void setCurrentCommand(String text) {
+	public void setCurrentCommand(String text) { //Set the current command
 		currentCommand.setText("<html><p style=\"text-align:center\"><font size=5>CURRENT COMMAND: " + text + "</font></p></html>");
 	}
 	
-	public void setQueueing(boolean b) {
+	public void setQueueing(boolean b) { //Set whether the robot is queueing
 		if(b) {
 			queueing.setText("<html>Currently queueing? <font color='green'>Yes</font></html>");
 		} else {
@@ -76,7 +113,7 @@ public class Alexa_GUI extends GBFrame{
 		}
 	}
 	
-	private void updateImages() {
+	private void updateImages() { //Update the images
 		if(laser) {
 			drawingPanel.setImage(laserIm);
 		} else {
@@ -85,16 +122,16 @@ public class Alexa_GUI extends GBFrame{
 		drawingPanel.repaint();
 	}
 	
-	public void setLaserImage(BufferedImage i) {
+	public void setLaserImage(BufferedImage i) { //Set a new image for the laser scan
 		laserIm = i;
 		updateImages();
 	}
 	
-	public void setCameraImage(BufferedImage i) {
+	public void setCameraImage(BufferedImage i) { //Set a new image from the camera
 		cameraIm = i;
 		updateImages();
 	}
-	public void setRunningQueue(boolean b) {
+	public void setRunningQueue(boolean b) { //Set whether the robot is running the queue
 		if(b) {
 			runningQueue.setText("<html>Currently running queue? <font color='green'>Yes</font></html>");
 		} else {
