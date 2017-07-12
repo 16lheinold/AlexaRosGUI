@@ -65,7 +65,6 @@ public class Listener extends AbstractNodeMain {
 		imageSub.addMessageListener(new MessageListener<sensor_msgs.Image>() {
 			@Override
 			public void onNewMessage(sensor_msgs.Image message) {
-				// log.info("I heard: \"" + message.getData() + "\"");
 				Image im = new Image(message.getHeader(), message.getHeight(), message.getWidth(),
 						message.getEncoding(), message.getIsBigendian(), message.getStep(), message.getData().array());
 				BufferedImage i = im.toBufferedImage();
@@ -124,7 +123,7 @@ public class Listener extends AbstractNodeMain {
 						e.printStackTrace();
 					}
 					gui.setCancel(false);
-					gui.messageBox("Current action cancelled.\n No longer queueing or running the queue.");
+					gui.messageBox("Current action cancelled.\nNo longer queueing or running the queue.");
 				}
 			}
 		});
