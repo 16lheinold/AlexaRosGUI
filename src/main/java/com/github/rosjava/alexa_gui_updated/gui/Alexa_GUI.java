@@ -65,6 +65,11 @@ public class Alexa_GUI extends GBFrame{
 			laser = !laser;
 			updateImages();
 		}
+		if(b == cancel) {
+			if(!cancelling) {
+				cancelling = true;
+			}
+		}
 	}
 	
 	public void menuItemSelected(JMenuItem m) {
@@ -102,7 +107,10 @@ public class Alexa_GUI extends GBFrame{
 	}
 	
 	public void setCurrentCommand(String text) { //Set the current command
-		currentCommand.setText("<html><p style=\"text-align:center\"><font size=5>CURRENT COMMAND: " + text + "</font></p></html>");
+		if(!cancelling)
+			currentCommand.setText("<html><p style=\"text-align:center\"><font size=5>CURRENT COMMAND: " + text + "</font></p></html>");
+		else
+			currentCommand.setText("<html><p style=\"text-align:center\"><font size=5>CURRENT COMMAND: Cancelling Current Action </font></p></html>");
 	}
 	
 	public void setQueueing(boolean b) { //Set whether the robot is queueing

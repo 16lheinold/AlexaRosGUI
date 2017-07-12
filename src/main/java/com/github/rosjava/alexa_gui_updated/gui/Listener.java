@@ -24,12 +24,15 @@ import javax.imageio.ImageIO;
 
 import org.apache.commons.logging.Log;
 import org.jboss.netty.buffer.ChannelBuffer;
+import org.ros.concurrent.CancellableLoop;
 import org.ros.message.MessageListener;
 import org.ros.namespace.GraphName;
 import org.ros.node.AbstractNodeMain;
 import org.ros.node.ConnectedNode;
 import org.ros.node.NodeMain;
 import org.ros.node.topic.Subscriber;
+import org.ros.node.topic.Publisher;
+
 
 import nav_msgs.OccupancyGrid;
 import std_msgs.Bool;
@@ -55,6 +58,8 @@ public class Listener extends AbstractNodeMain {
 		gui.setVisible(true);
 		gui.setTitle("Pioneer Directions Robot");
 
+		final Publisher<std_msgs.Bool> cancelPub =
+			    connectedNode.newPublisher("/move_to_point/cancel_goal", std_msgs.Bool._TYPE);
 		Subscriber<sensor_msgs.Image> imageSub = connectedNode.newSubscriber("/camera/image_raw",
 				sensor_msgs.Image._TYPE);
 		imageSub.addMessageListener(new MessageListener<sensor_msgs.Image>() {
@@ -75,7 +80,6 @@ public class Listener extends AbstractNodeMain {
 				OccGrid o = new OccGrid(message.getData().array(), message.getInfo().getWidth(), message.getInfo().getHeight());
 				BufferedImage i = o.toImage();
 				gui.setLaserImage(i);
-				log.info("here");
 			}
 		});
 		Subscriber<std_msgs.Bool> runningQueueSub = connectedNode.newSubscriber("/queue/running_queue", std_msgs.Bool._TYPE);
@@ -104,6 +108,24 @@ public class Listener extends AbstractNodeMain {
 			@Override
 			public void onNewMessage(std_msgs.String message) {
 				gui.setCurrentCommand(message.getData());
+			}
+		});
+		
+		connectedNode.executeCancellableLoop(new CancellableLoop() {
+			@Override
+			protected void loop() throws InterruptedException {
+				if(gui.getCancel()) {
+					std_msgs.Bool msg = cancelPub.newMessage();
+					msg.setData(true);
+					cancelPub.publish(msg);
+					try {
+						Thread.sleep(2000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					gui.setCancel(false);
+					gui.messageBox("Current action cancelled.\n No longer queueing or running the queue.");
+				}
 			}
 		});
 	}
