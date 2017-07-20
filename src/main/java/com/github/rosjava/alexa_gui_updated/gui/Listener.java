@@ -77,6 +77,8 @@ public class Listener extends AbstractNodeMain {
 			@Override
 			public void onNewMessage(nav_msgs.OccupancyGrid message) {
 				OccGrid o = new OccGrid(message.getData().array(), message.getInfo().getWidth(), message.getInfo().getHeight());
+				System.out.println(message.getInfo().getOrigin().getPosition().getX()
+						+ " " + message.getInfo().getOrigin().getPosition().getY());
 				BufferedImage i = o.toImage();
 				gui.setLaserImage(i);
 			}
