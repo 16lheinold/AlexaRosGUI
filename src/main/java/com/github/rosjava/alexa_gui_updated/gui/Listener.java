@@ -54,7 +54,7 @@ public class Listener extends AbstractNodeMain {
 		
 		//Set up the GUI
 		final Alexa_GUI gui = new Alexa_GUI();
-		gui.setSize(850, 500);
+		gui.setSize(800, 500);
 		gui.setVisible(true);
 		gui.setTitle("Pioneer Directions Robot");
 

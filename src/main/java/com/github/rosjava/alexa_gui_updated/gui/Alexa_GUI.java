@@ -23,7 +23,7 @@ public class Alexa_GUI extends GBFrame{
 	private JTextField runningQueueBool;
 	private GBPanel cameraLidar;
 	private ImagePanel drawingPanel;
-	private JButton switchCamera;
+	private JButton commandList;
 	private JButton cancel;
 	private BufferedImage laserIm;
 	private BufferedImage cameraIm;
@@ -41,7 +41,7 @@ public class Alexa_GUI extends GBFrame{
 		queueing = addLabel("<html>Currently queueing? <font color='red'>No</font></html>", 1,8,4,1);
 		runningQueue = addLabel("<html>Currently running queue? <font color='red'>No</font></html>", 2,8,4,1);
 		queue = addTextArea("Queue: \n", 3,7,4,4);
-		switchCamera = addButton("Switch from Camera to Laser Scan", 8,1,6,1);
+		commandList = addButton("View List of Commands", 8,1,6,1);
 		currentCommand = addLabel("<html><p style=\"text-align:center\"><font size=5>CURRENT COMMAND: </font></p></html>",9,1,10,1);
 		exit = addButton("Exit",10,1,10,1);
 		cancel = addButton("CANCEL CURRENT ACTION", 8, 7, 4, 1);
@@ -61,9 +61,20 @@ public class Alexa_GUI extends GBFrame{
 		if(b == exit) { //Exit
 			System.exit(0);
 		}
-		if(b == switchCamera) { //Switch between camera and laser scan
-			laser = !laser;
-			updateImages();
+		if(b == commandList) { //Switch between camera and laser scan
+			String message = "List of commands:\n\nMove the robot [direction] [number] [unit]: Move the robot a certain "
+					+ "distance. \nUnits are meters, centimetrs,"
+					+ " feet or inches. \n\nTurn the robot [left/right] [number] [degrees or radians]: Turn the robot a "
+					+ "certain amount in a certain direction.\nDefault is 90 degrees.\n\n"
+					+ "Find the door [direction] of  you: Find a door in a specific direction, or the closest.\n"
+					+ "Default is closest door.\n\n"
+					+ "Go [direction] down the hallway: Go down a hallway if you're in one. \n"
+					+ "Default is the direction the robot is facing.\n\n"
+					+ "[Start/stop] queueing/[start/stop] recording instructions: Any instruction given while in queueing mode\n"
+					+ "will be added to the queue and executed later.\n\n"
+					+ "[Start/stop] running the queue: Start/stop executing the commands in the queue.\n\n"
+					+ "Cancel: Cancels the current action; stops both queueing and running the queue.";
+			messageBox(message,815, 400);
 		}
 		if(b == cancel) {
 			if(!cancelling) {
